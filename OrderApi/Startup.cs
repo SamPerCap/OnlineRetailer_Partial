@@ -11,6 +11,8 @@ namespace OrderApi
 {
     public class Startup
     {
+        //To start up
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
