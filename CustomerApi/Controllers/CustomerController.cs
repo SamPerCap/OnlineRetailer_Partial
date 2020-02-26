@@ -1,46 +1,92 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using CustomerApi.Models;
+using CustomerApi.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CustomerController : ControllerBase
+    [Route("api/Customer")]
+    public class CustomerController : Controller
     {
+        private readonly IRepository<Customer> repository;
+
+        public CustomerController(IRepository<Customer> repos)
+        {
+            repository = repos;
+        }
         // GET: api/Customer
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Customer> Get()
         {
-            return new string[] { "value1", "value2" };
+            return repository.GetAll();
         }
 
         // GET: api/Customer/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpGet("{id}", Name = "GetCustomer")]
+        public IActionResult Get(int id)
         {
-            return "value";
+            var item = repository.Get(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+            return new ObjectResult(item);
         }
 
         // POST: api/Customer
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Customer customer)
         {
+            if (customer == null)
+            {
+                return BadRequest();
+            }
+            var newCustomer = repository.Add(customer);
+            return CreatedAtRoute("GetCustomer", new
+            {
+                id = newCustomer.Id,
+                name = newCustomer.Name
+            },
+                newCustomer);
         }
 
         // PUT: api/Customer/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(int id, [FromBody] Customer customer)
         {
+            if (customer == null || customer.Id != id)
+            {
+                return BadRequest();
+            }
+
+            var modifiedCustomer = repository.Get(id);
+
+            if (modifiedCustomer == null)
+            {
+                return NotFound();
+            }
+
+            modifiedCustomer.Name = customer.Name;
+            modifiedCustomer.Email = customer.Email;
+            modifiedCustomer.Phone = customer.Phone;
+            modifiedCustomer.BillingAddress = customer.BillingAddress;
+            modifiedCustomer.ShippingAddress = customer.ShippingAddress;
+            modifiedCustomer.CreditStanding = customer.CreditStanding;
+
+            repository.Edit(modifiedCustomer);
+            return new NoContentResult();
         }
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+            if (repository.Get(id) == null)
+            {
+                return NotFound();
+            }
+            repository.Remove(id);
+            return new NoContentResult();
         }
     }
 }
