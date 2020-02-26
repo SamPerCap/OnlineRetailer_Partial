@@ -14,7 +14,7 @@ namespace OrderApi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Order>()
-                 .HasOne(p => p.ProductId)
+                 .HasOne(p => p.Product)
                  .WithOne(u => u.Order)
                  .IsRequired();
 
