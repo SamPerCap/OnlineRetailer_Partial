@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CustomerApi.Data
 {
-    public class ProductApiContext
+    public class CustomerApiContext
     {
     }
 }
