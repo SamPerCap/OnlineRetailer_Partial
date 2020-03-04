@@ -1,7 +1,7 @@
 ﻿using System;
 namespace OrderApi.Models
 {
-    public class Order
+    public class HiddenOrder
     {
         public int Id { get; set; }
         public DateTime? Date { get; set; }

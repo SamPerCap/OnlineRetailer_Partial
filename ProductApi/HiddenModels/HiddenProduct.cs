@@ -1,6 +1,6 @@
 ﻿namespace ProductApi.Models
 {
-    public class Product
+    public class HiddenProduct
     {
         public int Id { get; set; }
         public string Name { get; set; }
