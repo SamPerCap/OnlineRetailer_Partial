@@ -30,7 +30,7 @@ namespace CustomerApi
         public void ConfigureServices(IServiceCollection services)
         {
             // In-memory database:
-            services.AddDbContext<CustomerApiContext>(opt => opt.UseInMemoryDatabase("OrdersDb"));
+            services.AddDbContext<CustomerApiContext>(opt => opt.UseInMemoryDatabase("CustomersDb"));
 
             // Register repositories for dependency injection
             services.AddScoped<IRepository<Customer>, CustomerRepository>();
