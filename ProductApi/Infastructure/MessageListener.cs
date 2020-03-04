@@ -1,6 +1,5 @@
 ﻿using EasyNetQ;
 using Microsoft.Extensions.DependencyInjection;
-using OrderApi.Models;
 using ProductApi.Data;
 using SharedModels;
 using System;
@@ -56,7 +55,7 @@ namespace ProductApi.Infastructure
             using (var scope = provider.CreateScope())
             {
                 var services = scope.ServiceProvider;
-                var productRepos = services.GetService<IRepository<Product>>();
+                var productRepos = services.GetService<IRepository<SharedProducts>>();
 
                 // Reserve items of ordered product (should be a single transaction).
                 // Beware that this operation is not idempotent.

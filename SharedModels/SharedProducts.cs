@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SharedModels
 {
-    class SharedProducts
+    public class SharedProducts
     {
         public int Id { get; set; }
         public string Name { get; set; }
