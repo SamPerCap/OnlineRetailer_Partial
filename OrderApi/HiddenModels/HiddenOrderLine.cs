@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OrderApi.Models
 {
-    public class OrderLine
+    public class HiddenOrderLine
     {
         public int NoOfItems { get; set; }
     }
