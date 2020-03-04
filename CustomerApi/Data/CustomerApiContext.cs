@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using CustomerApi.Models;
+using CustomersApi.Models;
 
-namespace CustomerApi.Data
+namespace CustomersApi.Data
 {
     public class CustomerApiContext : DbContext
     {

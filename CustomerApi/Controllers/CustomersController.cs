@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
-using CustomerApi.Models;
-using CustomerApi.Data;
+using CustomersApi.Models;
+using CustomersApi.Data;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CustomerApi.Controllers
+namespace CustomersApi.Controllers
 {
-    [Route("api/Customer")]
-    public class CustomerController : Controller
+    [Route("api/Customers")]
+    public class CustomersController : Controller
     {
         private readonly IRepository<Customer> repository;
 
-        public CustomerController(IRepository<Customer> repos)
+        public CustomersController(IRepository<Customer> repos)
         {
             repository = repos;
         }
