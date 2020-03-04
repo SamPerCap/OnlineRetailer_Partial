@@ -19,9 +19,9 @@ namespace OrderApi.Data
                 return;   // DB has been seeded
             }
 
-            List<Order> orders = new List<Order>
+            List<HiddenOrder> orders = new List<HiddenOrder>
             {
-                new Order { Date = DateTime.Today, ProductId = 1, Quantity = 2 }
+                new HiddenOrder { Date = DateTime.Today, ProductId = 1, Quantity = 2 }
             };
 
             context.Orders.AddRange(orders);

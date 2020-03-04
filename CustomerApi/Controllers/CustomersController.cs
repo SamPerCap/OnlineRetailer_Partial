@@ -8,15 +8,15 @@ namespace CustomersApi.Controllers
     [Route("api/Customers")]
     public class CustomersController : Controller
     {
-        private readonly IRepository<Customer> repository;
+        private readonly IRepository<HiddenCustomer> repository;
 
-        public CustomersController(IRepository<Customer> repos)
+        public CustomersController(IRepository<HiddenCustomer> repos)
         {
             repository = repos;
         }
         // GET: api/Customer
         [HttpGet]
-        public IEnumerable<Customer> Get()
+        public IEnumerable<HiddenCustomer> Get()
         {
             return repository.GetAll();
         }
@@ -35,7 +35,7 @@ namespace CustomersApi.Controllers
 
         // POST: api/Customer
         [HttpPost]
-        public IActionResult Post([FromBody] Customer customer)
+        public IActionResult Post([FromBody] HiddenCustomer customer)
         {
             if (customer == null)
             {
@@ -52,7 +52,7 @@ namespace CustomersApi.Controllers
 
         // PUT: api/Customer/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Customer customer)
+        public IActionResult Put(int id, [FromBody] HiddenCustomer customer)
         {
             if (customer == null || customer.Id != id)
             {

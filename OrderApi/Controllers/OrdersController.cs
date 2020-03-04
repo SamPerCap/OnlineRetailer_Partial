@@ -10,16 +10,16 @@ namespace OrderApi.Controllers
     [Route("api/Orders")]
     public class OrdersController : Controller
     {
-        private readonly IRepository<Order> repository;
+        private readonly IRepository<HiddenOrder> repository;
 
-        public OrdersController(IRepository<Order> repos)
+        public OrdersController(IRepository<HiddenOrder> repos)
         {
             repository = repos;
         }
 
         // GET: api/orders
         [HttpGet]
-        public IEnumerable<Order> Get()
+        public IEnumerable<HiddenOrder> Get()
         {
             return repository.GetAll();
         }
@@ -38,7 +38,7 @@ namespace OrderApi.Controllers
 
         // POST api/orders
         [HttpPost]
-        public IActionResult Post([FromBody]Order order)
+        public IActionResult Post([FromBody]HiddenOrder order)
         {
             if (order == null)
             {
@@ -51,7 +51,7 @@ namespace OrderApi.Controllers
             // before you can run the request.
             c.BaseUrl = new Uri("https://localhost:5001/api/products/");
             var request = new RestRequest(order.ProductId.ToString(), Method.GET);
-            var response = c.Execute<Product>(request);
+            var response = c.Execute<HiddenProduct>(request);
             var orderedProduct = response.Data;
 
             if (order.Quantity <= orderedProduct.ItemsInStock - orderedProduct.ItemsReserved)

@@ -25,7 +25,7 @@ namespace ProductApi
             services.AddDbContext<ProductApiContext>(opt => opt.UseInMemoryDatabase("ProductsDb"));
 
             // Register repositories for dependency injection
-            services.AddScoped<IRepository<Product>, ProductRepository>();
+            services.AddScoped<IRepository<HiddenProduct>, ProductRepository>();
 
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();

@@ -11,6 +11,6 @@ namespace CustomersApi.Data
 
         }
 
-        public DbSet<Customer> Customers { get; set; }
+        public DbSet<HiddenCustomer> Customers { get; set; }
     }
 }

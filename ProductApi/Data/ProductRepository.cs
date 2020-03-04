@@ -5,7 +5,7 @@ using ProductApi.Models;
 
 namespace ProductApi.Data
 {
-    public class ProductRepository : IRepository<Product>
+    public class ProductRepository : IRepository<HiddenProduct>
     {
         private readonly ProductApiContext db;
 
@@ -14,30 +14,30 @@ namespace ProductApi.Data
             db = context;
         }
 
-        Product IRepository<Product>.Add(Product entity)
+        HiddenProduct IRepository<HiddenProduct>.Add(HiddenProduct entity)
         {
             var newProduct = db.Products.Add(entity).Entity;
             db.SaveChanges();
             return newProduct;
         }
 
-        void IRepository<Product>.Edit(Product entity)
+        void IRepository<HiddenProduct>.Edit(HiddenProduct entity)
         {
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        Product IRepository<Product>.Get(int id)
+        HiddenProduct IRepository<HiddenProduct>.Get(int id)
         {
             return db.Products.FirstOrDefault(p => p.Id == id);
         }
 
-        IEnumerable<Product> IRepository<Product>.GetAll()
+        IEnumerable<HiddenProduct> IRepository<HiddenProduct>.GetAll()
         {
             return db.Products.ToList();
         }
 
-        void IRepository<Product>.Remove(int id)
+        void IRepository<HiddenProduct>.Remove(int id)
         {
             var product = db.Products.FirstOrDefault(p => p.Id == id);
             db.Products.Remove(product);
