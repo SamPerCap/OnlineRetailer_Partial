@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CustomerApi.Infastructure
 {
-    public class ProductServiceGateway : IServiceGateway<Product>
+    public class ProductServiceGateway : IServiceGateway<HiddenProduct>
     {
         Uri productServiceBaseUrl;
 
@@ -14,7 +14,7 @@ namespace CustomerApi.Infastructure
         {
             productServiceBaseUrl = baseUrl;
         }
-        public Product Get(int id)
+        public HiddenProduct Get(int id)
         {
             throw new NotImplementedException();
         }

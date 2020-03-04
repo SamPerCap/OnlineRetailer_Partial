@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ProductApi.Data;
+using ProductApi.Models;
 
 namespace ProductApi.Controllers
 {
