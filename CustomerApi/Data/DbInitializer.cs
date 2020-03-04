@@ -23,7 +23,8 @@ namespace CustomersApi.Data
             {
                 new HiddenCustomer { Name = "Customer0", Email = "customer0@hotmail.com", BillingAddress = "Wuhan's first street", Phone = 666, CreditStanding = 15, ShippingAddress = "Corona Street" },
                 new HiddenCustomer { Name = "Customer1", Email = "customer1@hotmail.com", BillingAddress = "Somalia's latest street", Phone = 0101, CreditStanding = 2395123, ShippingAddress = "Mogadiscio" },
-                new HiddenCustomer { Name = "Customer2", Email = "customer2@hotmail.com", BillingAddress = "EASV", Phone = 1453, CreditStanding = 0, ShippingAddress = "SDU" }
+                new HiddenCustomer { Name = "Customer2", Email = "customer2@hotmail.com", BillingAddress = "EASV", Phone = 1453, CreditStanding = 0, ShippingAddress = "SDU" },
+                new HiddenCustomer { Name = "Samuel Adams", Email = "sam@espaniole.es", BillingAddress = "Malaga", Phone = 6969, CreditStanding = 1, ShippingAddress = "SomewhereInSpain" }
             };
 
             context.Customers.AddRange(customers);
