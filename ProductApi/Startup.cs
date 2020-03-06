@@ -5,12 +5,25 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProductApi.Data;
+using ProductApi.Infastructure;
 using ProductApi.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace ProductApi
 {
     public class Startup
     {
+        // Base URL for the product service when the solution is executed using docker-compose.
+        // The product service (running as a container) listens on this URL for HTTP requests
+        // from other services specified in the docker compose file (which in this solution is
+        // the order service).
+        Uri productServiceBaseUrl = new Uri("http://productapi/products/");
+
+        // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
+        // Remember to replace this connectionstring with youur own.
+        string cloudAMQPConnectionString =
+            "host=hare.rmq.cloudamqp.com;virtualHost=npaprqop;username=npaprqop;password=putyourpasswordhere";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -45,6 +58,10 @@ namespace ProductApi
                 var dbInitializer = services.GetService<IDbInitializer>();
                 dbInitializer.Initialize(dbContext);
             }
+
+            // Create a message listener in a separate thread.
+            Task.Factory.StartNew(() =>
+                new MessageListener(app.ApplicationServices, cloudAMQPConnectionString).Start());
 
             if (env.IsDevelopment())
             {
