@@ -14,11 +14,11 @@ namespace OrderApi
 {
     public class Startup
     {
-        Uri productServiceBaseUrl = new Uri("http://productapi/products/");
+        Uri productServiceBaseUrl = new Uri("https://localhost:5001/api/products");
         // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
         // Remember to replace this connectionstring with youur own.
         string cloudAMQPConnectionString =
-            "host=hare.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+            "host=baboon.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
 
         //To start up
         public Startup(IConfiguration configuration)

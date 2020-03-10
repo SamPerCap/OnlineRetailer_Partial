@@ -65,9 +65,9 @@ namespace OrderApi.Controllers
                     var newOrder = repository.Add(order);
                     return CreatedAtRoute("GetOrder", new { id = newOrder.Id }, newOrder);
                 }
-                catch
+                catch(Exception e)
                 {
-                    return StatusCode(500, "An error happened. Try again.");
+                    return StatusCode(500, "An error happened. Try again." + e);
                 }
             }
             else

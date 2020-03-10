@@ -1,4 +1,5 @@
 ﻿using OrderApi.Models;
+using RestSharp;
 using SharedModels;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,13 @@ namespace OrderApi.Infastructure
         }
         public SharedProducts Get(int id)
         {
-            throw new NotImplementedException();
+            RestClient c = new RestClient();
+            c.BaseUrl = productServiceBaseUrl;
+
+            var request = new RestRequest(id.ToString(), Method.GET);
+            var response = c.Execute<SharedProducts>(request);
+            var orderedProduct = response.Data;
+            return orderedProduct;
         }
     }
 }
