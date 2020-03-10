@@ -25,8 +25,9 @@ namespace CustomerApi.Infrastructure
         {
             using (var bus = RabbitHutch.CreateBus(connectionString))
             {
-                bus.Subscribe<OrderStatusChangedMessage>("customerApiCompleted",
-                    HandleOrderCompleted, x => x.WithTopic("completed"));
+                //It needs to be adapted to customers
+                //bus.Subscribe<OrderStatusChangedMessage>("customerApiCompleted",
+                 //   HandleOrderCompleted, x => x.WithTopic("completed"));
 
                 // Block the thread so that it will not exit and stop subscribing.
                 lock (this)
@@ -37,25 +38,6 @@ namespace CustomerApi.Infrastructure
 
         }
 
-        private void HandleOrderCompleted(OrderStatusChangedMessage message)
-        {
-            // A service scope is created to get an instance of the product repository.
-            // When the service scope is disposed, the product repository instance will
-            // also be disposed.
-            using (var scope = provider.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var productRepos = services.GetService<IRepository<SharedCustomers>>();
-
-                // Reserve items of ordered product (should be a single transaction).
-                // Beware that this operation is not idempotent.
-                foreach (var orderLine in message.OrderLines)
-                {
-                    var product = productRepos.Get(orderLine.ProductId);
-                    product.ItemsReserved += orderLine.Quantity;
-                    productRepos.Edit(product);
-                }
-            }
-        }
+        
     }
 }

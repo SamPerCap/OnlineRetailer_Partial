@@ -59,7 +59,7 @@ namespace ProductApi.Infastructure
 
                 // Reserve items of ordered product (should be a single transaction).
                 // Beware that this operation is not idempotent.
-                foreach (var orderLine in message.OrderLines)
+                foreach (var orderLine in message.SharedOrderLine)
                 {
                     var product = productRepos.Get(orderLine.ProductId);
                     product.ItemsReserved += orderLine.Quantity;

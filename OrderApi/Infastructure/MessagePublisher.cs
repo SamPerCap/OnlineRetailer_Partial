@@ -2,8 +2,6 @@
 using SharedModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OrderApi.Infastructure
 {
@@ -25,7 +23,7 @@ namespace OrderApi.Infastructure
             var message = new OrderStatusChangedMessage
             {
                 CustomerId = customerId,
-                OrderLines = orderLines
+                SharedOrderLine = orderLines
             };
 
             bus.Publish(message, topic);

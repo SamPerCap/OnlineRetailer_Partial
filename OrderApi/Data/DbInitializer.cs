@@ -21,7 +21,11 @@ namespace OrderApi.Data
 
             List<HiddenOrder> orders = new List<HiddenOrder>
             {
-                new HiddenOrder { Date = DateTime.Today, ProductId = 1, Quantity = 2 }
+                new HiddenOrder { Date = DateTime.Today,
+                    OrderLines = new List<HiddenOrderLine>{
+                        new HiddenOrderLine { ProductId = 1, Quantity = 2 }
+                    }
+                    }
             };
 
             context.Orders.AddRange(orders);
