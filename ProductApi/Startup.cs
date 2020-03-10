@@ -15,7 +15,7 @@ namespace ProductApi
     public class Startup
     {
         string cloudAMQPConnectionString =
-            "host=hare.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+            "host=baboon.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
 
         public Startup(IConfiguration configuration)
         {
