@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CustomerApi.Infastructure
+namespace OrderApi.Infastructure
 {
     public class ProductServiceGateway : IServiceGateway<HiddenProduct>
     {
