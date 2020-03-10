@@ -2,22 +2,23 @@
 using Microsoft.AspNetCore.Mvc;
 using ProductApi.Data;
 using ProductApi.Models;
+using SharedModels;
 
 namespace ProductApi.Controllers
 {
     [Route("api/Products")]
     public class ProductsController : Controller
     {
-        private readonly IRepository<HiddenProduct> repository;
+        private readonly IRepository<SharedProducts> repository;
 
-        public ProductsController(IRepository<HiddenProduct> repos)
+        public ProductsController(IRepository<SharedProducts> repos)
         {
             repository = repos;
         }
 
         // GET: api/products
         [HttpGet]
-        public IEnumerable<HiddenProduct> Get()
+        public IEnumerable<SharedProducts> Get()
         {
             return repository.GetAll();
         }
@@ -36,7 +37,7 @@ namespace ProductApi.Controllers
 
         // POST api/products
         [HttpPost]
-        public IActionResult Post([FromBody]HiddenProduct product)
+        public IActionResult Post([FromBody]SharedProducts product)
         {
             if (product == null)
             {
@@ -50,7 +51,7 @@ namespace ProductApi.Controllers
 
         // PUT api/products/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody]HiddenProduct product)
+        public IActionResult Put(int id, [FromBody]SharedProducts product)
         {
             if (product == null || product.Id != id)
             {

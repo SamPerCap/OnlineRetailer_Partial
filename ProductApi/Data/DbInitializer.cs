@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ProductApi.Models;
+using SharedModels;
 
 namespace ProductApi.Data
 {
@@ -18,11 +19,11 @@ namespace ProductApi.Data
                 return;   // DB has been seeded
             }
 
-            List<HiddenProduct> products = new List<HiddenProduct>
+            List<SharedProducts> products = new List<SharedProducts>
             {
-                new HiddenProduct { Name = "Hammer", Price = 100, ItemsInStock = 10, ItemsReserved = 0 },
-                new HiddenProduct { Name = "Screwdriver", Price = 70, ItemsInStock = 20, ItemsReserved = 0 },
-                new HiddenProduct { Name = "Drill", Price = 500, ItemsInStock = 2, ItemsReserved = 0 }
+                new SharedProducts { Name = "Hammer", Price = 100, ItemsInStock = 10, ItemsReserved = 0 },
+                new SharedProducts { Name = "Screwdriver", Price = 70, ItemsInStock = 20, ItemsReserved = 0 },
+                new SharedProducts { Name = "Drill", Price = 500, ItemsInStock = 2, ItemsReserved = 0 }
             };
 
             context.Products.AddRange(products);

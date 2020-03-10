@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using ProductApi.Models;
+using SharedModels;
 
 namespace ProductApi.Data
 {
-    public class ProductRepository : IRepository<HiddenProduct>
+    public class ProductRepository : IRepository<SharedProducts>
     {
         private readonly ProductApiContext db;
 
@@ -14,30 +15,30 @@ namespace ProductApi.Data
             db = context;
         }
 
-        HiddenProduct IRepository<HiddenProduct>.Add(HiddenProduct entity)
+        SharedProducts IRepository<SharedProducts>.Add(SharedProducts entity)
         {
             var newProduct = db.Products.Add(entity).Entity;
             db.SaveChanges();
             return newProduct;
         }
 
-        void IRepository<HiddenProduct>.Edit(HiddenProduct entity)
+        void IRepository<SharedProducts>.Edit(SharedProducts entity)
         {
             db.Entry(entity).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        HiddenProduct IRepository<HiddenProduct>.Get(int id)
+        SharedProducts IRepository<SharedProducts>.Get(int id)
         {
             return db.Products.FirstOrDefault(p => p.Id == id);
         }
 
-        IEnumerable<HiddenProduct> IRepository<HiddenProduct>.GetAll()
+        IEnumerable<SharedProducts> IRepository<SharedProducts>.GetAll()
         {
             return db.Products.ToList();
         }
 
-        void IRepository<HiddenProduct>.Remove(int id)
+        void IRepository<SharedProducts>.Remove(int id)
         {
             var product = db.Products.FirstOrDefault(p => p.Id == id);
             db.Products.Remove(product);

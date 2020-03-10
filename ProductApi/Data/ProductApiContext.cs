@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProductApi.Models;
+using SharedModels;
 
 namespace ProductApi.Data
 {
@@ -10,6 +11,6 @@ namespace ProductApi.Data
         {
         }
 
-        public DbSet<HiddenProduct> Products { get; set; }
+        public DbSet<SharedProducts> Products { get; set; }
     }
 }
