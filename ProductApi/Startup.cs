@@ -23,7 +23,7 @@ namespace ProductApi
         // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
         // Remember to replace this connectionstring with youur own.
         string cloudAMQPConnectionString =
-            "host=hare.rmq.cloudamqp.com;virtualHost=npaprqop;username=npaprqop;password=putyourpasswordhere";
+            "host=hare.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
