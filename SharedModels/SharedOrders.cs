@@ -4,13 +4,13 @@ using System.Text;
 
 namespace SharedModels
 {
-    public class Order
+    public class SharedOrders
     {
         public int Id { get; set; }
         public DateTime? Date { get; set; }
         public int? customerId { get; set; }
         public OrderStatus Status { get; set; }
-        public IList<OrderLine> OrderLines { get; set; }
+        public IList<SharedOrderLine> OrderLines { get; set; }
 
         public enum OrderStatus
         {
@@ -21,7 +21,7 @@ namespace SharedModels
         }
     }
 
-    public class OrderLine
+    public class SharedOrderLine
     {
         public int id { get; set; }
         public int OrderId { get; set; }

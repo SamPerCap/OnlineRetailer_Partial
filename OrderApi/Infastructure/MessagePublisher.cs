@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CustomerApi.Infastructure
+namespace OrderApi.Infastructure
 {
     public class MessagePublisher : IMessagePublisher, IDisposable
     {
@@ -20,7 +20,7 @@ namespace CustomerApi.Infastructure
             bus.Dispose();
         }
 
-        public void PublishOrderStatusChangedMessage(int? customerId, IList<OrderLine> orderLines, string topic)
+        public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
         {
             var message = new OrderStatusChangedMessage
             {

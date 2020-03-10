@@ -7,6 +7,9 @@ namespace OrderApi.Models
 {
     public class HiddenOrderLine
     {
-        public int NoOfItems { get; set; }
+        public int id { get; set; }
+        public int OrderId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
     }
 }
