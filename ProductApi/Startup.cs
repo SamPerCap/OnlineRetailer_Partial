@@ -1,29 +1,21 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using ProductApi.Data;
 using ProductApi.Infastructure;
 using ProductApi.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace ProductApi
 {
     public class Startup
     {
-        // Base URL for the product service when the solution is executed using docker-compose.
-        // The product service (running as a container) listens on this URL for HTTP requests
-        // from other services specified in the docker compose file (which in this solution is
-        // the order service).
-        Uri productServiceBaseUrl = new Uri("http://productapi/products/");
-
-        // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
-        // Remember to replace this connectionstring with youur own.
         string cloudAMQPConnectionString =
             "host=hare.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -43,11 +35,11 @@ namespace ProductApi
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             // Initialize the database
             using (var scope = app.ApplicationServices.CreateScope())
@@ -67,14 +59,17 @@ namespace ProductApi
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
