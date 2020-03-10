@@ -1,13 +1,13 @@
 using System.Threading.Tasks;
 using CustomerApi.Infrastructure;
 using CustomersApi.Data;
-using CustomersApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SharedModels;
 
 namespace CustomersApi
 {
@@ -30,7 +30,7 @@ namespace CustomersApi
             services.AddDbContext<CustomerApiContext>(opt => opt.UseInMemoryDatabase("CustomersDb"));
 
             // Register repositories for dependency injection
-            services.AddScoped<IRepository<HiddenCustomer>, CustomerRepository>();
+            services.AddScoped<IRepository<SharedCustomers>, CustomerRepository>();
 
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();

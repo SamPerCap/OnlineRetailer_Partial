@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CustomersApi.Models
 {
-    public class HiddenCustomer
+    public class SharedCustomers
     {
         public int Id { get; set; }
         public string Name { get; set; }

@@ -1,41 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CustomersApi.Models;
 using Microsoft.EntityFrameworkCore;
+using SharedModels;
 
 namespace CustomersApi.Data
 {
-    public class CustomerRepository : IRepository<HiddenCustomer>
+    public class CustomerRepository : IRepository<SharedCustomers>
     {
         private readonly CustomerApiContext db;
         public CustomerRepository(CustomerApiContext context)
         {
             db = context;
         }
-        HiddenCustomer IRepository<HiddenCustomer>.Add(HiddenCustomer customer)
+        SharedCustomers IRepository<SharedCustomers>.Add(SharedCustomers customer)
         {
             var newCustomer = db.Customers.Add(customer).Entity;
             db.SaveChanges();
             return newCustomer;
         }
 
-        void IRepository<HiddenCustomer>.Edit(HiddenCustomer modifiedCustomer)
+        void IRepository<SharedCustomers>.Edit(SharedCustomers modifiedCustomer)
         {
             db.Entry(modifiedCustomer).State = EntityState.Modified;
             db.SaveChanges();
         }
 
-        HiddenCustomer IRepository<HiddenCustomer>.Get(int id)
+        SharedCustomers IRepository<SharedCustomers>.Get(int id)
         {
             return db.Customers.FirstOrDefault(c => c.Id == id);
         }
 
-        IEnumerable<HiddenCustomer> IRepository<HiddenCustomer>.GetAll()
+        IEnumerable<SharedCustomers> IRepository<SharedCustomers>.GetAll()
         {
             return db.Customers.ToList();
         }
 
-        void IRepository<HiddenCustomer>.Remove(int id)
+        void IRepository<SharedCustomers>.Remove(int id)
         {
             var customer = db.Customers.FirstOrDefault(c => c.Id == id);
             db.Customers.Remove(customer);
