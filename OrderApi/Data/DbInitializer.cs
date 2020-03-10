@@ -28,8 +28,17 @@ namespace OrderApi.Data
                     }
                     }
             };
+            List<SharedOrders> orders2 = new List<SharedOrders>
+            {
+                new SharedOrders { Date = DateTime.Today,
+                    OrderLines = new List<SharedOrderLine>{
+                        new SharedOrderLine { ProductId = 2, Quantity = 3 }
+                    }
+                    }
+            };
 
             context.Orders.AddRange(orders);
+            context.Orders.AddRange(orders2);
             context.SaveChanges();
         }
     }
