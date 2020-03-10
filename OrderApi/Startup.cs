@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using OrderApi.Data;
 using OrderApi.Infastructure;
 using OrderApi.Models;
+using SharedModels;
 using System;
 using System.Threading.Tasks;
 
@@ -34,13 +35,13 @@ namespace OrderApi
             services.AddDbContext<OrderApiContext>(opt => opt.UseInMemoryDatabase("OrdersDb"));
 
             // Register repositories for dependency injection
-            services.AddScoped<IRepository<HiddenOrder>, OrderRepository>();
+            services.AddScoped<IRepository<SharedOrders>, OrderRepository>();
 
             // Register database initializer for dependency injection
             services.AddTransient<IDbInitializer, DbInitializer>();
 
             // Register product service gateway for dependency injection
-            services.AddSingleton<IServiceGateway<HiddenProduct>>(new
+            services.AddSingleton<IServiceGateway<SharedProducts>>(new
                 ProductServiceGateway(productServiceBaseUrl));
 
             // Register MessagePublisher (a messaging gateway) for dependency injection

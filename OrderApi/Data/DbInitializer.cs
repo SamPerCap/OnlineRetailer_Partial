@@ -2,6 +2,7 @@
 using System.Linq;
 using OrderApi.Models;
 using System;
+using SharedModels;
 
 namespace OrderApi.Data
 {
@@ -19,11 +20,11 @@ namespace OrderApi.Data
                 return;   // DB has been seeded
             }
 
-            List<HiddenOrder> orders = new List<HiddenOrder>
+            List<SharedOrders> orders = new List<SharedOrders>
             {
-                new HiddenOrder { Date = DateTime.Today,
-                    OrderLines = new List<HiddenOrderLine>{
-                        new HiddenOrderLine { ProductId = 1, Quantity = 2 }
+                new SharedOrders { Date = DateTime.Today,
+                    OrderLines = new List<SharedOrderLine>{
+                        new SharedOrderLine { ProductId = 1, Quantity = 2 }
                     }
                     }
             };

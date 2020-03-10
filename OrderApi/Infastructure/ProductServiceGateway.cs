@@ -1,4 +1,5 @@
 ﻿using OrderApi.Models;
+using SharedModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OrderApi.Infastructure
 {
-    public class ProductServiceGateway : IServiceGateway<HiddenProduct>
+    public class ProductServiceGateway : IServiceGateway<SharedProducts>
     {
         Uri productServiceBaseUrl;
 
@@ -14,7 +15,7 @@ namespace OrderApi.Infastructure
         {
             productServiceBaseUrl = baseUrl;
         }
-        public HiddenProduct Get(int id)
+        public SharedProducts Get(int id)
         {
             throw new NotImplementedException();
         }

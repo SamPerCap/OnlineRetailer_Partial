@@ -1,5 +1,6 @@
 ﻿    using Microsoft.EntityFrameworkCore;
 using OrderApi.Models;
+using SharedModels;
 
 namespace OrderApi.Data
 {
@@ -11,6 +12,6 @@ namespace OrderApi.Data
 
         }
 
-        public DbSet<HiddenOrder> Orders { get; set; }
+        public DbSet<SharedOrders> Orders { get; set; }
     }
 }
