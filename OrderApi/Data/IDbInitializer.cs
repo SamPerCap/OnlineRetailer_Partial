@@ -1,4 +1,4 @@
-﻿namespace OrderApi.Data
+﻿    namespace OrderApi.Data
 {
     public interface IDbInitializer
     {

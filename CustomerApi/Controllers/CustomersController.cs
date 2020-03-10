@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
-using CustomersApi.Models;
 using CustomersApi.Data;
 using Microsoft.AspNetCore.Mvc;
+using SharedModels;
 
 namespace CustomersApi.Controllers
 {
     [Route("api/Customers")]
     public class CustomersController : Controller
     {
-        private readonly IRepository<HiddenCustomer> repository;
+        private readonly IRepository<SharedCustomers> repository;
 
-        public CustomersController(IRepository<HiddenCustomer> repos)
+        public CustomersController(IRepository<SharedCustomers> repos)
         {
             repository = repos;
         }
         // GET: api/Customer
         [HttpGet]
-        public IEnumerable<HiddenCustomer> Get()
+        public IEnumerable<SharedCustomers> Get()
         {
             return repository.GetAll();
         }
@@ -35,7 +35,7 @@ namespace CustomersApi.Controllers
 
         // POST: api/Customer
         [HttpPost]
-        public IActionResult Post([FromBody] HiddenCustomer customer)
+        public IActionResult Post([FromBody] SharedCustomers customer)
         {
             if (customer == null)
             {
@@ -52,7 +52,7 @@ namespace CustomersApi.Controllers
 
         // PUT: api/Customer/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] HiddenCustomer customer)
+        public IActionResult Put(int id, [FromBody] SharedCustomers customer)
         {
             if (customer == null || customer.Id != id)
             {
