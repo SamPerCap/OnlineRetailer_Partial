@@ -14,7 +14,7 @@ namespace OrderApi
 {
     public class Startup
     {
-        Uri productServiceBaseUrl = new Uri("https://localhost:5001/api/products");
+        Uri productServiceBaseUrl = new Uri("http://productapi/api/products");
         // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
         // Remember to replace this connectionstring with youur own.
         string cloudAMQPConnectionString =
@@ -68,7 +68,7 @@ namespace OrderApi
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
