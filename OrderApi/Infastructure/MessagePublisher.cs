@@ -28,5 +28,15 @@ namespace OrderApi.Infastructure
 
             bus.Publish(message, topic);
         }
+
+        public void PublishSharedProducts(int Id,  string topic)
+        {
+            var message = new SharedProducts
+            {
+                Id = Id
+            };
+
+            bus.Publish(message, topic);
+        }
     }
 }

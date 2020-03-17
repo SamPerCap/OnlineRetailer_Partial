@@ -78,16 +78,31 @@ namespace OrderApi.Controllers
         }
         private bool ProductItemsAvailable(SharedOrders order)
         {
-            foreach (var orderLine in order.OrderLines)
+            try
             {
-                // Call product service to get the product ordered.
-                var orderedProduct = productGateway.Get(orderLine.ProductId);
-                if (orderLine.Quantity > orderedProduct.ItemsInStock - orderedProduct.ItemsReserved)
+                foreach (var orderLine in order.OrderLines)
                 {
-                    return false;
+                    // Call product service to get the product ordered.
+                    //  var orderedProduct = productGateway.Get(orderLine.ProductId);
+
+                    // Publish PublishShareProducts. If this operation
+                    // fails, the order will not be created
+                    messagePublisher.PublishSharedProducts(
+                         orderLine.ProductId, "available");
+
+
+                    //if (orderLine.Quantity > orderedProduct.ItemsInStock - orderedProduct.ItemsReserved)
+                    //{
+                    //    return false;
+                    //}
                 }
+                return true;
             }
-            return true;
+            catch
+            {
+                return false;
+            }
+           
         }
     }
 }

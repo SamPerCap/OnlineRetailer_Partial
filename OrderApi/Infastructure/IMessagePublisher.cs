@@ -8,6 +8,7 @@ namespace OrderApi.Infastructure
 {
     public interface IMessagePublisher
     {
+        void PublishSharedProducts(int Id,  string topic);
         void PublishOrderStatusChangedMessage(int? customerId,
         IList<SharedOrderLine> orderLines, string topic);
     }
