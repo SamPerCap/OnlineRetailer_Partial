@@ -28,6 +28,12 @@ namespace ProductApi.Infastructure
                 bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
                     HandleOrderCompleted, x => x.WithTopic("completed"));
 
+
+               var subscriptionResult =  bus.Subscribe<SharedProducts>("productIsAvailable",
+                    CheckProductAvailable, x => x.WithTopic("available"));
+
+                
+
                 // Add code to subscribe to other OrderStatusChanged events:
                 // * cancelled
                 // * shipped
@@ -65,6 +71,28 @@ namespace ProductApi.Infastructure
                     product.ItemsReserved += orderLine.Quantity;
                     productRepos.Edit(product);
                 }
+            }
+        }
+
+        private void CheckProductAvailable(SharedProducts prod)
+        {
+            // A service scope is created to get an instance of the product repository.
+            // When the service scope is disposed, the product repository instance will
+            // also be disposed.
+            using (var scope = provider.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var productRepos = services.GetService<IRepository<SharedProducts>>();
+
+                var product = productRepos.Get(prod.Id);
+                // Reserve items of ordered product (should be a single transaction).
+                // Beware that this operation is not idempotent.
+                //foreach (var orderLine in message.SharedOrderLine)
+                //{
+                //    var product = productRepos.Get(orderLine.ProductId);
+                //    product.ItemsReserved += orderLine.Quantity;
+                //    productRepos.Edit(product);
+                //}
             }
         }
     }
