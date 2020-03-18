@@ -29,8 +29,8 @@ namespace ProductApi.Infastructure
                     HandleOrderCompleted, x => x.WithTopic("completed"));
 
 
-               var subscriptionResult =  bus.Subscribe<SharedProducts>("productIsAvailable",
-                    CheckProductAvailable, x => x.WithTopic("available"));
+                bus.Subscribe<SharedProducts>("productIsAvailable",
+                    CheckProductAvailable);
 
                 
 
@@ -81,18 +81,21 @@ namespace ProductApi.Infastructure
             // also be disposed.
             using (var scope = provider.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                var productRepos = services.GetService<IRepository<SharedProducts>>();
+                using (var bus = RabbitHutch.CreateBus(connectionString))
+                {
+                    var services = scope.ServiceProvider;
+                    var productRepos = services.GetService<IRepository<SharedProducts>>();
 
-                var product = productRepos.Get(prod.Id);
-                // Reserve items of ordered product (should be a single transaction).
-                // Beware that this operation is not idempotent.
-                //foreach (var orderLine in message.SharedOrderLine)
-                //{
-                //    var product = productRepos.Get(orderLine.ProductId);
-                //    product.ItemsReserved += orderLine.Quantity;
-                //    productRepos.Edit(product);
-                //}
+                    var product = productRepos.Get(prod.Id);
+                    if (product != null)
+                    {
+                        bus.Send("productIsAvailable", product);
+                    }
+                    else
+                    {
+                        bus.Send("productIsNotAvailable", product);
+                    }
+                }
             }
         }
     }

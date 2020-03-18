@@ -15,9 +15,14 @@ namespace OrderApi.Controllers
         private readonly IRepository<SharedOrders> repository;
         private readonly IServiceGateway<SharedProducts> productGateway;
         private readonly IMessagePublisher messagePublisher;
+        private readonly MessageListener messageListener;
 
-        public OrdersController(IRepository<SharedOrders> repos, IServiceGateway<SharedProducts> gateway, IMessagePublisher publisher)
+        public OrdersController(IRepository<SharedOrders> repos, 
+            IServiceGateway<SharedProducts> gateway, 
+            IMessagePublisher publisher,
+            MessageListener _messageListener)
         {
+            messageListener = _messageListener;
             repository = repos;
             productGateway = gateway;
             messagePublisher = publisher;
@@ -51,7 +56,9 @@ namespace OrderApi.Controllers
                 return BadRequest();
             }
 
-            if (ProductItemsAvailable(order))
+            ProductItemsAvailable(order);
+            messageListener.DoesOrderExist();
+            if (order != null)
             {
                 try
                 {
@@ -76,33 +83,13 @@ namespace OrderApi.Controllers
                 return StatusCode(500, "Not enough items in stock.");
             }
         }
-        private bool ProductItemsAvailable(SharedOrders order)
+        private void ProductItemsAvailable(SharedOrders order)
         {
-            try
+            foreach (var orderLine in order.OrderLines)
             {
-                foreach (var orderLine in order.OrderLines)
-                {
-                    // Call product service to get the product ordered.
-                    //  var orderedProduct = productGateway.Get(orderLine.ProductId);
-
-                    // Publish PublishShareProducts. If this operation
-                    // fails, the order will not be created
-                    messagePublisher.PublishSharedProducts(
-                         orderLine.ProductId, "available");
-
-
-                    //if (orderLine.Quantity > orderedProduct.ItemsInStock - orderedProduct.ItemsReserved)
-                    //{
-                    //    return false;
-                    //}
-                }
-                return true;
+                messagePublisher.PublishSharedProducts(
+                        orderLine.ProductId, "available");
             }
-            catch
-            {
-                return false;
-            }
-           
         }
     }
 }
