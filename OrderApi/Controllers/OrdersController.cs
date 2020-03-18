@@ -17,9 +17,11 @@ namespace OrderApi.Controllers
         private readonly IServiceGateway<SharedCustomers> customerGateway;
         private readonly IMessagePublisher messagePublisher;
 
-        public OrdersController(IRepository<SharedOrders> repos, IServiceGateway<SharedProducts> gateway, IMessagePublisher publisher)
+        public OrdersController(IRepository<SharedOrders> repos, IServiceGateway<SharedCustomers> cstGateway,
+            IServiceGateway<SharedProducts> gateway, IMessagePublisher publisher)
         {
             repository = repos;
+            customerGateway = cstGateway;
             productGateway = gateway;
             messagePublisher = publisher;
         }
@@ -47,7 +49,7 @@ namespace OrderApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]SharedOrders order)
         {
-            if (order == null)
+            if (order == null || order.customerId < 1)
             {
                 return BadRequest();
             }
