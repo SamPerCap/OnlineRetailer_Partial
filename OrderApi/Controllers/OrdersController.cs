@@ -15,14 +15,11 @@ namespace OrderApi.Controllers
         private readonly IRepository<SharedOrders> repository;
         private readonly IServiceGateway<SharedProducts> productGateway;
         private readonly IMessagePublisher messagePublisher;
-        private readonly MessageListener messageListener;
 
         public OrdersController(IRepository<SharedOrders> repos, 
             IServiceGateway<SharedProducts> gateway, 
-            IMessagePublisher publisher,
-            MessageListener _messageListener)
+            IMessagePublisher publisher)
         {
-            messageListener = _messageListener;
             repository = repos;
             productGateway = gateway;
             messagePublisher = publisher;
@@ -57,8 +54,8 @@ namespace OrderApi.Controllers
             }
 
             ProductItemsAvailable(order);
-            messageListener.DoesOrderExist();
-            if (order != null)
+            var c = messagePublisher.DoesOrderExist();
+            if (c)
             {
                 try
                 {
