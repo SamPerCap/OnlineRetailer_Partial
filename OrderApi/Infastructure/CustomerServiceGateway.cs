@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace OrderApi.Infastructure
 {
+    /*
     public class CustomerServiceGateway : IServiceGateway<SharedCustomers>
     {
         Uri customerServiceBaseUrl;
@@ -25,5 +26,5 @@ namespace OrderApi.Infastructure
             var orderedCustomer = response.Data;
             return orderedCustomer;
         }
-    }
+    }*/
 }

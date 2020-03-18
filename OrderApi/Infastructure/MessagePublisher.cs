@@ -18,7 +18,7 @@ namespace OrderApi.Infastructure
             bus.Dispose();
         }
 
-        public void PublishOrderStatusChangedMessage(int customerId, IList<SharedOrderLine> orderLines, string topic)
+        public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
         {
             var message = new OrderStatusChangedMessage
             {
@@ -28,7 +28,15 @@ namespace OrderApi.Infastructure
 
             bus.Publish(message, topic);
         }
-        public void PublishSharedProducts(int Id,  string topic)
+        public void PublishCustomerExists(int customerId, string topic)
+        {
+            var message = new SharedCustomers
+            {
+                Id = customerId
+            };
+            bus.Publish(message, topic);
+        }
+        public void PublishSharedProducts(int Id, string topic)
         {
             var message = new SharedProducts
             {

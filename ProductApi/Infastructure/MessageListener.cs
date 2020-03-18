@@ -27,12 +27,18 @@ namespace ProductApi.Infastructure
             {
                 bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
                     HandleOrderCompleted, x => x.WithTopic("completed"));
+                bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
+                    HandleOrderCompleted, x => x.WithTopic("cancelled"));
+                bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
+                    HandleOrderCompleted, x => x.WithTopic("shipped"));
+                bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
+                    HandleOrderCompleted, x => x.WithTopic("paid"));
+
+                var subscriptionResult = bus.Subscribe<SharedProducts>("productIsAvailable",
+                     CheckProductAvailable, x => x.WithTopic("available"));
 
 
-               var subscriptionResult =  bus.Subscribe<SharedProducts>("productIsAvailable",
-                    CheckProductAvailable, x => x.WithTopic("available"));
 
-                
 
                 // Add code to subscribe to other OrderStatusChanged events:
                 // * cancelled

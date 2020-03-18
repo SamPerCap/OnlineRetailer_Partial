@@ -16,7 +16,9 @@ namespace CustomersApi
     {
         //To start up
         string cloudAMQPConnectionString =
-            "host=hare.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+          "host=hawk.rmq.cloudamqp.com;virtualHost=embszgpu;username=embszgpu;password=Maer_MLg3Ib4341CdUnICTys6OBO53Lq";
+        //Kris'
+        //"host=hare.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -42,10 +44,10 @@ namespace CustomersApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            
+
             Task.Factory.StartNew(() =>
                 new MessageListener(app.ApplicationServices, cloudAMQPConnectionString).Start());
-            
+
 
 
             // Initialize the database

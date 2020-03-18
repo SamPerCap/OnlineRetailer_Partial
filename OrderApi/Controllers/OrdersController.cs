@@ -81,14 +81,19 @@ namespace OrderApi.Controllers
 
         }
 
-        private bool CustomerExists(SharedOrders order)
+        private bool CustomerExists(SharedOrders orders)
         {
-            var requestingCustomerId = customerGateway.Get(order.customerId);
-            if (!String.IsNullOrEmpty(requestingCustomerId.Name))
+            try
+            {
+                messagePublisher.PublishCustomerExists(orders.customerId, "customerExists");
                 return true;
-            else
+            }
+            catch
+            {
                 return false;
+            }
         }
+
 
         private bool ProductItemsAvailable(SharedOrders order)
         {
@@ -116,7 +121,7 @@ namespace OrderApi.Controllers
             {
                 return false;
             }
-           
+
         }
     }
 }
