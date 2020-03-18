@@ -14,6 +14,7 @@ namespace OrderApi.Controllers
     {
         private readonly IRepository<SharedOrders> repository;
         private readonly IServiceGateway<SharedProducts> productGateway;
+        private readonly IServiceGateway<SharedCustomers> customerGateway;
         private readonly IMessagePublisher messagePublisher;
 
         public OrdersController(IRepository<SharedOrders> repos, IServiceGateway<SharedProducts> gateway, IMessagePublisher publisher)
@@ -51,7 +52,7 @@ namespace OrderApi.Controllers
                 return BadRequest();
             }
 
-            if (ProductItemsAvailable(order))
+            if (ProductItemsAvailable(order) && CustomerExists(order))
             {
                 try
                 {
@@ -65,7 +66,7 @@ namespace OrderApi.Controllers
                     var newOrder = repository.Add(order);
                     return CreatedAtRoute("GetOrder", new { id = newOrder.Id }, newOrder);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     return StatusCode(500, "An error happened. Try again." + e);
                 }
@@ -75,7 +76,18 @@ namespace OrderApi.Controllers
                 // If there are not enough product items available.
                 return StatusCode(500, "Not enough items in stock.");
             }
+
         }
+
+        private bool CustomerExists(SharedOrders order)
+        {
+            var requestingCustomerId = customerGateway.Get(order.customerId);
+            if (!String.IsNullOrEmpty(requestingCustomerId.Name))
+                return true;
+            else
+                return false;
+        }
+
         private bool ProductItemsAvailable(SharedOrders order)
         {
             foreach (var orderLine in order.OrderLines)

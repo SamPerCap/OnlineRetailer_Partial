@@ -6,7 +6,8 @@ namespace SharedModels
 {
     public class OrderStatusChangedMessage
     {
-        public int? CustomerId { get; set; }
+        public int CustomerId { get; set; }
         public IList<SharedOrderLine> SharedOrderLine { get; set; }
+
     }
 }

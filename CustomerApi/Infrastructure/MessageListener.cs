@@ -25,19 +25,19 @@ namespace CustomerApi.Infrastructure
         {
             using (var bus = RabbitHutch.CreateBus(connectionString))
             {
-                //It needs to be adapted to customers
-                //bus.Subscribe<OrderStatusChangedMessage>("customerApiCompleted",
-                 //   HandleOrderCompleted, x => x.WithTopic("completed"));
-
-                // Block the thread so that it will not exit and stop subscribing.
-                lock (this)
-                {
-                    Monitor.Wait(this);
-                }
+                bus.Subscribe<OrderStatusChangedMessage>("customerApiCompleted",
+                    HandleCustomerCompleted, x => x.WithTopic("Customers"));
             }
-
         }
 
-        
+        private void HandleCustomerCompleted(OrderStatusChangedMessage message)
+        {
+            using (var scope = provider.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var custoerRepo = services.GetService<IRepository<SharedCustomers>>();
+                var customer = custoerRepo.Get(message.CustomerId);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using CustomerApi.Infrastructure;
 using CustomersApi.Data;
+using EasyNetQ;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -41,9 +42,11 @@ namespace CustomersApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-
+            
             Task.Factory.StartNew(() =>
                 new MessageListener(app.ApplicationServices, cloudAMQPConnectionString).Start());
+            
+
 
             // Initialize the database
             using (var scope = app.ApplicationServices.CreateScope())

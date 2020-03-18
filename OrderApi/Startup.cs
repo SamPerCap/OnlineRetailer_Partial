@@ -15,10 +15,15 @@ namespace OrderApi
     public class Startup
     {
         Uri productServiceBaseUrl = new Uri("http://productapi/api/products");
+        Uri customerServceBaseUrl = new Uri("http://customerapi/api/customers");
         // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
         // Remember to replace this connectionstring with youur own.
+
+        //Kris'
+        //"host=baboon.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+        //Sam's
         string cloudAMQPConnectionString =
-            "host=baboon.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+            "hawk.rmq.cloudamqp.com;virtualHost=embszgpu;username=embszgpu;password=Maer_MLg3Ib4341CdUnICTys6OBO53Lq";
 
         //To start up
         public Startup(IConfiguration configuration)
@@ -43,6 +48,8 @@ namespace OrderApi
             // Register product service gateway for dependency injection
             services.AddSingleton<IServiceGateway<SharedProducts>>(new
                 ProductServiceGateway(productServiceBaseUrl));
+            services.AddSingleton<IServiceGateway<SharedCustomers>>(new
+                CustomerServiceGateway(customerServceBaseUrl));
 
             // Register MessagePublisher (a messaging gateway) for dependency injection
             services.AddSingleton<IMessagePublisher>(new

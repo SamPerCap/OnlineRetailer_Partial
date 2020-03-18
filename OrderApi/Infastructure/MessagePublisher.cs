@@ -18,7 +18,7 @@ namespace OrderApi.Infastructure
             bus.Dispose();
         }
 
-        public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
+        public void PublishOrderStatusChangedMessage(int customerId, IList<SharedOrderLine> orderLines, string topic)
         {
             var message = new OrderStatusChangedMessage
             {
@@ -28,5 +28,6 @@ namespace OrderApi.Infastructure
 
             bus.Publish(message, topic);
         }
+        
     }
 }
