@@ -1,13 +1,19 @@
 ﻿using EasyNetQ;
+using OrderApi.Models;
 using SharedModels;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OrderApi.Infastructure
 {
     public class MessagePublisher : IMessagePublisher, IDisposable
     {
         IBus bus;
+        static int id;
+        static string name;
+
         public MessagePublisher(string connectionString)
         {
             bus = RabbitHutch.CreateBus(connectionString);
@@ -16,6 +22,31 @@ namespace OrderApi.Infastructure
         public void Dispose()
         {
             bus.Dispose();
+        }
+
+        public bool ProductExists(int prodId, int amount)
+        {
+            var message = new SharedProductAvailableRequest()
+            {
+                ProductId = prodId,
+                Quantity = amount
+            };
+
+            var response = bus.Request<SharedProductAvailableRequest, SharedProductAvailableResponse>(message);
+
+            return response.ProductIsAvailable;
+        }
+
+        public bool CustomerExists(int custId)
+        {
+            var message = new SharedCustomerRequest()
+            {
+                CustomerId = custId
+            };
+
+            var response = bus.Request<SharedCustomerRequest, SharedCustomerResponse>(message);
+
+            return response.Exists;
         }
 
         public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
@@ -47,7 +78,7 @@ namespace OrderApi.Infastructure
                 Id = Id
             };
 
-            bus.Publish(message, topic);
+            bus.Send(topic, message);
         }
     }
 }

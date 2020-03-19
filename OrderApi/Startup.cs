@@ -5,10 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OrderApi.Data;
 using OrderApi.Infastructure;
-using OrderApi.Models;
 using SharedModels;
 using System;
-using System.Threading.Tasks;
 
 namespace OrderApi
 {
@@ -16,9 +14,6 @@ namespace OrderApi
     {
         Uri productServiceBaseUrl = new Uri("http://productapi/api/products");
         Uri customerServceBaseUrl = new Uri("http://customerapi/api/customers");
-        // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
-        // Remember to replace this connectionstring with youur own.
-
         //Kris'
         //"host=baboon.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
         //Sam's

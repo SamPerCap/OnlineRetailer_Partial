@@ -17,11 +17,11 @@ namespace OrderApi.Controllers
         private readonly IServiceGateway<SharedCustomers> customerGateway;
         private readonly IMessagePublisher messagePublisher;
 
-        public OrdersController(IRepository<SharedOrders> repos, IServiceGateway<SharedCustomers> cstGateway,
-            IServiceGateway<SharedProducts> gateway, IMessagePublisher publisher)
+        public OrdersController(IRepository<SharedOrders> repos,
+            IServiceGateway<SharedProducts> gateway,
+            IMessagePublisher publisher)
         {
             repository = repos;
-            customerGateway = cstGateway;
             productGateway = gateway;
             messagePublisher = publisher;
         }
@@ -59,6 +59,14 @@ namespace OrderApi.Controllers
             {
                 try
                 {
+                    foreach (var item in order.OrderLines)
+                    {
+                        if (!messagePublisher.ProductExists(item.ProductId, item.Quantity))
+                        {
+                            return StatusCode(500, "Not enough items in stock.");
+                        }
+                    }
+
                     // Publish OrderStatusChangedMessage. If this operation
                     // fails, the order will not be created
                     messagePublisher.PublishOrderStatusChangedMessage(
@@ -79,7 +87,6 @@ namespace OrderApi.Controllers
                 // If there are not enough product items available.
                 return StatusCode(500, "Not enough items in stock.");
             }
-
         }
 
         private bool CustomerExists(SharedOrders orders)
@@ -114,7 +121,6 @@ namespace OrderApi.Controllers
             {
                 return false;
             }
-
         }
     }
 }
