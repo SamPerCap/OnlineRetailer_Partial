@@ -28,13 +28,17 @@ namespace OrderApi.Infastructure
 
             bus.Publish(message, topic);
         }
-        public void PublishCustomerExists(int customerId, string topic)
+        public bool PublishCustomerExists(int customerId)
         {
             var message = new SharedCustomers
             {
                 Id = customerId
             };
-            bus.Publish(message, topic);
+            var response = bus.Request<SharedCustomers, SharedCustomers>(message);
+            if (response != null)
+                return true;
+            else
+                return false;
         }
         public void PublishSharedProducts(int Id, string topic)
         {

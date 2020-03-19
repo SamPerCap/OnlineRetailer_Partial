@@ -25,18 +25,21 @@ namespace CustomerApi.Infrastructure
         {
             using (var bus = RabbitHutch.CreateBus(connectionString))
             {
-                var subscriptionResult = bus.Subscribe<SharedCustomers>("customerExists",
-                    HandleCustomerExists, x => x.WithTopic("Exists"));
+                bus.Respond<SharedCustomers, SharedCustomers>(message => HandleCustomerExists(message.Id));
+
+                lock (this)
+                    Monitor.Wait(this);
             }
         }
 
-        private void HandleCustomerExists(SharedCustomers message)
+        private SharedCustomers HandleCustomerExists(int message)
         {
             using (var scope = provider.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var custoerRepo = services.GetService<IRepository<SharedCustomers>>();
-                var customer = custoerRepo.Get(message.Id);
+                var customer = custoerRepo.Get(message);
+                return customer;
             }
         }
     }

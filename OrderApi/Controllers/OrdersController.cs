@@ -54,7 +54,8 @@ namespace OrderApi.Controllers
                 return BadRequest();
             }
 
-            if (ProductItemsAvailable(order) && CustomerExists(order))
+            //if (ProductItemsAvailable(order) && CustomerExists(order))
+            if (CustomerExists(order))
             {
                 try
                 {
@@ -83,15 +84,7 @@ namespace OrderApi.Controllers
 
         private bool CustomerExists(SharedOrders orders)
         {
-            try
-            {
-                messagePublisher.PublishCustomerExists(orders.customerId, "customerExists");
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            return messagePublisher.PublishCustomerExists(orders.customerId);
         }
 
 
