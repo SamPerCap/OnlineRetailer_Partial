@@ -30,7 +30,6 @@ namespace ProductApi.Infastructure
 
                 bus.Respond<SharedProductAvailableRequest, SharedProductAvailableResponse>(request => CheckProductAvailable(request));
 
-
                 // Add code to subscribe to other OrderStatusChanged events:
                 // * cancelled
                 // * shipped
@@ -47,7 +46,6 @@ namespace ProductApi.Infastructure
                     Monitor.Wait(this);
                 }
             }
-
         }
 
         private SharedProductAvailableResponse CheckProductAvailable(SharedProductAvailableRequest request)
@@ -62,7 +60,7 @@ namespace ProductApi.Infastructure
                 var productRepos = services.GetService<IRepository<SharedProducts>>();
 
                 var product = productRepos.Get(request.ProductId);
-                if (product.ItemsInStock >= request.Quantity)
+                if (product.ItemsInStock >= request.Quantity && product.Id > 0)
                 {
                     response.ProductIsAvailable = true;
                 }

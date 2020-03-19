@@ -54,11 +54,11 @@ namespace OrderApi.Controllers
                 {
                     return BadRequest();
                 }
-                ProductItemsAvailable(order);
+                //ProductItemsAvailable(order);
 
                 foreach (var item in order.OrderLines)
                 {
-                    if (messagePublisher.ProductExists(item.id, item.Quantity))
+                    if (!messagePublisher.ProductExists(item.ProductId, item.Quantity))
                     {
                         return StatusCode(500, "Not enough items in stock.");
                     }

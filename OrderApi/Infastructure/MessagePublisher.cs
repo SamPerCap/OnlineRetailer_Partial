@@ -26,30 +26,15 @@ namespace OrderApi.Infastructure
 
         public bool ProductExists(int prodId, int amount)
         {
-            var request = new SharedProductAvailableRequest()
+            var message = new SharedProductAvailableRequest()
             {
                 ProductId = prodId,
                 Quantity = amount
             };
 
-            var response = bus.Request<SharedProductAvailableRequest, SharedProductAvailableResponse>(request);
+            var response = bus.Request<SharedProductAvailableRequest, SharedProductAvailableResponse>(message);
 
             return response.ProductIsAvailable;
-        }
-
-        static void MethodForProduct(SharedProducts message)
-        {
-
-            if (message.Name != null)
-            {
-                name=message.Name;
-                id =message.Id;
-            }
-            else
-            {
-                name = null;
-                id = 0;
-            }
         }
 
         public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
