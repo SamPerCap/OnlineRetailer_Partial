@@ -8,5 +8,6 @@ namespace SharedModels
     {
         public int CustomerId { get; set; }
         public bool Exists { get; set; }
+
     }
 }

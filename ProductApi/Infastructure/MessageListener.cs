@@ -25,14 +25,14 @@ namespace ProductApi.Infastructure
         {
             using (var bus = RabbitHutch.CreateBus(connectionString))
             {
-                bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
-                    HandleOrderCompleted, x => x.WithTopic("completed"));
-                bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
-                    HandleOrderCompleted, x => x.WithTopic("cancelled"));
-                bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
-                    HandleOrderCompleted, x => x.WithTopic("shipped"));
-                bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
-                    HandleOrderCompleted, x => x.WithTopic("paid"));
+                //bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
+                //    HandleOrderCompleted, x => x.WithTopic("completed"));
+                //bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
+                //    HandleOrderCompleted, x => x.WithTopic("cancelled"));
+                //bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
+                //    HandleOrderCompleted, x => x.WithTopic("shipped"));
+                //bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
+                //    HandleOrderCompleted, x => x.WithTopic("paid"));
 
                 bus.Respond<SharedProductAvailableRequest, SharedProductAvailableResponse>(request => CheckProductAvailable(request));
 

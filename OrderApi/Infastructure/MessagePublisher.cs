@@ -61,15 +61,12 @@ namespace OrderApi.Infastructure
         }
         public bool PublishCustomerExists(int customerId)
         {
-            var message = new SharedCustomers
+            var message = new SharedCustomerRequest
             {
-                Id = customerId
+                CustomerId = customerId
             };
-            var response = bus.Request<SharedCustomers, SharedCustomers>(message);
-            if (response != null)
-                return true;
-            else
-                return false;
+            var response = bus.Request<SharedCustomerRequest, SharedCustomerResponse>(message);
+            return response.Exists;
         }
         public void PublishSharedProducts(int Id, string topic)
         {
