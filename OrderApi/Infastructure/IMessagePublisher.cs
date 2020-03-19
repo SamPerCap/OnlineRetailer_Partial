@@ -1,4 +1,5 @@
-﻿using SharedModels;
+﻿using OrderApi.Models;
+using SharedModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,6 @@ namespace OrderApi.Infastructure
         void PublishSharedProducts(int Id,  string topic);
         void PublishOrderStatusChangedMessage(int? customerId,
         IList<SharedOrderLine> orderLines, string topic);
-        SharedProducts ProductExists(SharedProducts prods);
+        bool ProductExists(int ProductId, int Quantity);
     }
 }

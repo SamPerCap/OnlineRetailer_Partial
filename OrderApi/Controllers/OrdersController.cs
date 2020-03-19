@@ -48,38 +48,34 @@ namespace OrderApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]SharedOrders order)
         {
-            SharedProducts prods = new SharedProducts();
-            if (order == null)
+            try
             {
-                return BadRequest();
-            }
-
-            ProductItemsAvailable(order);
-            var prod = messagePublisher.ProductExists(prods);
-
-            if (prod != null && prod.Id > 0)
-            {
-                try
+                if (order == null)
                 {
-                    // Publish OrderStatusChangedMessage. If this operation
-                    // fails, the order will not be created
-                    messagePublisher.PublishOrderStatusChangedMessage(
-                        order.customerId, order.OrderLines, "completed");
+                    return BadRequest();
+                }
+                ProductItemsAvailable(order);
 
-                    // Create order.
-                    order.Status = SharedOrders.OrderStatus.completed;
-                    var newOrder = repository.Add(order);
-                    return CreatedAtRoute("GetOrder", new { id = newOrder.Id }, newOrder);
-                }
-                catch(Exception e)
+                foreach (var item in order.OrderLines)
                 {
-                    return StatusCode(500, "An error happened. Try again." + e);
+                    if (messagePublisher.ProductExists(item.id, item.Quantity))
+                    {
+                        return StatusCode(500, "Not enough items in stock.");
+                    }
                 }
+
+                // Publish OrderStatusChangedMessage. If this operation
+                // fails, the order will not be created
+                messagePublisher.PublishOrderStatusChangedMessage(
+                    order.customerId, order.OrderLines, "completed");
+                // Create order.
+                order.Status = SharedOrders.OrderStatus.completed;
+                var newOrder = repository.Add(order);
+                return CreatedAtRoute("GetOrder", new { id = newOrder.Id }, newOrder);
             }
-            else
+            catch (Exception e)
             {
-                // If there are not enough product items available.
-                return StatusCode(500, "Not enough items in stock.");
+                return StatusCode(500, "An error happened. Try again." + e);
             }
         }
         private void ProductItemsAvailable(SharedOrders order)

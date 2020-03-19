@@ -28,9 +28,8 @@ namespace ProductApi.Infastructure
                 bus.Subscribe<OrderStatusChangedMessage>("productApiCompleted",
                     HandleOrderCompleted, x => x.WithTopic("completed"));
 
+                bus.Respond<SharedProductAvailableRequest, SharedProductAvailableResponse>(request => CheckProductAvailable(request));
 
-                bus.Subscribe<SharedProducts>("available",
-                    CheckProductAvailable);
 
                 // Add code to subscribe to other OrderStatusChanged events:
                 // * cancelled
@@ -51,6 +50,30 @@ namespace ProductApi.Infastructure
 
         }
 
+        private SharedProductAvailableResponse CheckProductAvailable(SharedProductAvailableRequest request)
+        {
+            // A service scope is created to get an instance of the product repository.
+            // When the service scope is disposed, the product repository instance will
+            // also be disposed.
+            using (var scope = provider.CreateScope())
+            {
+                var response = new SharedProductAvailableResponse();
+                var services = scope.ServiceProvider;
+                var productRepos = services.GetService<IRepository<SharedProducts>>();
+
+                var product = productRepos.Get(request.ProductId);
+                if (product.ItemsInStock >= request.Quantity)
+                {
+                    response.ProductIsAvailable = true;
+                }
+                else
+                {
+                    response.ProductIsAvailable = false;
+                }
+                return response;
+            }
+        }
+
         private void HandleOrderCompleted(OrderStatusChangedMessage message)
         {
             // A service scope is created to get an instance of the product repository.
@@ -68,31 +91,6 @@ namespace ProductApi.Infastructure
                     var product = productRepos.Get(orderLine.ProductId);
                     product.ItemsReserved += orderLine.Quantity;
                     productRepos.Edit(product);
-                }
-            }
-        }
-
-        private void CheckProductAvailable(SharedProducts prod)
-        {
-            // A service scope is created to get an instance of the product repository.
-            // When the service scope is disposed, the product repository instance will
-            // also be disposed.
-            using (var scope = provider.CreateScope())
-            {
-                using (var bus = RabbitHutch.CreateBus(connectionString))
-                {
-                    var services = scope.ServiceProvider;
-                    var productRepos = services.GetService<IRepository<SharedProducts>>();
-
-                    var product = productRepos.Get(prod.Id);
-                    if (product != null)
-                    {
-                        bus.Send("productIsAvailable", product);
-                    }
-                    else
-                    {
-                        bus.Send("productIsNotAvailable", product);
-                    }
                 }
             }
         }

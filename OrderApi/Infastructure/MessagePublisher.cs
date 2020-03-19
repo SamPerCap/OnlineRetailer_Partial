@@ -11,7 +11,9 @@ namespace OrderApi.Infastructure
     public class MessagePublisher : IMessagePublisher, IDisposable
     {
         IBus bus;
-        int id;
+        static int id;
+        static string name;
+
         public MessagePublisher(string connectionString)
         {
             bus = RabbitHutch.CreateBus(connectionString);
@@ -22,17 +24,32 @@ namespace OrderApi.Infastructure
             bus.Dispose();
         }
 
-        public SharedProducts ProductExists(SharedProducts prod)
+        public bool ProductExists(int prodId, int amount)
         {
-            Thread.Sleep(TimeSpan.FromSeconds(5));
-            bus.Receive<SharedProducts>("productIsAvailable", message => MethodForProduct(message));
-            prod.Id = id;
-            return prod;
+            var request = new SharedProductAvailableRequest()
+            {
+                ProductId = prodId,
+                Quantity = amount
+            };
+
+            var response = bus.Request<SharedProductAvailableRequest, SharedProductAvailableResponse>(request);
+
+            return response.ProductIsAvailable;
         }
 
-        private void MethodForProduct(SharedProducts message)
+        static void MethodForProduct(SharedProducts message)
         {
-            id = message.Id;
+
+            if (message.Name != null)
+            {
+                name=message.Name;
+                id =message.Id;
+            }
+            else
+            {
+                name = null;
+                id = 0;
+            }
         }
 
         public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
@@ -53,7 +70,7 @@ namespace OrderApi.Infastructure
                 Id = Id
             };
 
-            bus.Publish(message, topic);
+            bus.Send(topic, message);
         }
     }
 }

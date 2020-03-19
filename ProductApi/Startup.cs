@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -14,8 +15,9 @@ namespace ProductApi
 {
     public class Startup
     {
+
         string cloudAMQPConnectionString =
-            "host=baboon.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+                    "host=hawk.rmq.cloudamqp.com;virtualHost=ocgllwbf;username=ocgllwbf;password=x9dJX23cUodU9E91G0l9TBTAzMAdhwsd";
 
         public Startup(IConfiguration configuration)
         {

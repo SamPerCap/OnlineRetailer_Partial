@@ -5,10 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OrderApi.Data;
 using OrderApi.Infastructure;
-using OrderApi.Models;
 using SharedModels;
 using System;
-using System.Threading.Tasks;
 
 namespace OrderApi
 {
@@ -18,7 +16,7 @@ namespace OrderApi
         // RabbitMQ connection string (I use CloudAMQP as a RabbitMQ server).
         // Remember to replace this connectionstring with youur own.
         string cloudAMQPConnectionString =
-            "host=baboon.rmq.cloudamqp.com;virtualHost=xzmfsdno;username=xzmfsdno;password=bbqqKyO5uEP8XgIy921h3unMiAwZUleX";
+                    "host=hawk.rmq.cloudamqp.com;virtualHost=ocgllwbf;username=ocgllwbf;password=x9dJX23cUodU9E91G0l9TBTAzMAdhwsd";
 
         //To start up
         public Startup(IConfiguration configuration)
