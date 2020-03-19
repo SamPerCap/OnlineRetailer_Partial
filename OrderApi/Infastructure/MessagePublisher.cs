@@ -37,6 +37,18 @@ namespace OrderApi.Infastructure
             return response.ProductIsAvailable;
         }
 
+        public bool CustomerExists(int custId)
+        {
+            var message = new SharedCustomerRequest()
+            {
+                CustomerId = custId
+            };
+
+            var response = bus.Request<SharedCustomerRequest, SharedCustomerResponse>(message);
+
+            return response.Exists;
+        }
+
         public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
         {
             var message = new OrderStatusChangedMessage

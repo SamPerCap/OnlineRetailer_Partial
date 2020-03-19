@@ -25,9 +25,8 @@ namespace CustomerApi.Infrastructure
         {
             using (var bus = RabbitHutch.CreateBus(connectionString))
             {
-                //It needs to be adapted to customers
-                //bus.Subscribe<OrderStatusChangedMessage>("customerApiCompleted",
-                 //   HandleOrderCompleted, x => x.WithTopic("completed"));
+                bus.Respond<SharedCustomerRequest, SharedCustomerResponse>(request => CustomerExists(request));
+
 
                 // Block the thread so that it will not exit and stop subscribing.
                 lock (this)
@@ -38,6 +37,28 @@ namespace CustomerApi.Infrastructure
 
         }
 
-        
+        private SharedCustomerResponse CustomerExists(SharedCustomerRequest request)
+        {
+            // A service scope is created to get an instance of the product repository.
+            // When the service scope is disposed, the product repository instance will
+            // also be disposed.
+            using (var scope = provider.CreateScope())
+            {
+                var response = new SharedCustomerResponse();
+                var services = scope.ServiceProvider;
+                var customerRepos = services.GetService<IRepository<SharedCustomers>>();
+
+                var customer = customerRepos.Get(request.CustomerId);
+                if (customer != null)
+                {
+                    response.Exists = true;
+                }
+                else
+                {
+                    response.Exists = false;
+                }
+                return response;
+            }
+        }
     }
 }

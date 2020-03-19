@@ -12,6 +12,7 @@ namespace OrderApi.Infastructure
         void PublishSharedProducts(int Id,  string topic);
         void PublishOrderStatusChangedMessage(int? customerId,
         IList<SharedOrderLine> orderLines, string topic);
-        bool ProductExists(int ProductId, int Quantity);
+        bool ProductExists(int ProductId, int Amount);
+        bool CustomerExists(int CustId);
     }
 }

@@ -56,6 +56,12 @@ namespace OrderApi.Controllers
                 }
                 //ProductItemsAvailable(order);
 
+                var custExists = messagePublisher.CustomerExists(order.customerId);
+                if (!custExists)
+                {
+                    return StatusCode(500, "Not enough items in stock.");
+                }
+
                 foreach (var item in order.OrderLines)
                 {
                     if (!messagePublisher.ProductExists(item.ProductId, item.Quantity))
@@ -76,14 +82,6 @@ namespace OrderApi.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, "An error happened. Try again." + e);
-            }
-        }
-        private void ProductItemsAvailable(SharedOrders order)
-        {
-            foreach (var orderLine in order.OrderLines)
-            {
-                messagePublisher.PublishSharedProducts(
-                        orderLine.ProductId, "available");
             }
         }
     }
