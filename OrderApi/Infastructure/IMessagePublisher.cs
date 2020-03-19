@@ -8,9 +8,9 @@ namespace OrderApi.Infastructure
 {
     public interface IMessagePublisher
     {
-        bool DoesOrderExist();
         void PublishSharedProducts(int Id,  string topic);
         void PublishOrderStatusChangedMessage(int? customerId,
         IList<SharedOrderLine> orderLines, string topic);
+        SharedProducts ProductExists(SharedProducts prods);
     }
 }

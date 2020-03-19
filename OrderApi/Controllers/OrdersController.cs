@@ -48,14 +48,16 @@ namespace OrderApi.Controllers
         [HttpPost]
         public IActionResult Post([FromBody]SharedOrders order)
         {
+            SharedProducts prods = new SharedProducts();
             if (order == null)
             {
                 return BadRequest();
             }
 
             ProductItemsAvailable(order);
-            var c = messagePublisher.DoesOrderExist();
-            if (c)
+            var prod = messagePublisher.ProductExists(prods);
+
+            if (prod != null && prod.Id > 0)
             {
                 try
                 {

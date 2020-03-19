@@ -1,16 +1,17 @@
 ﻿using EasyNetQ;
+using OrderApi.Models;
 using SharedModels;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OrderApi.Infastructure
 {
     public class MessagePublisher : IMessagePublisher, IDisposable
     {
         IBus bus;
-        static int timeoutInterval = 1000;
-        private bool orderExists = false;
+        int id;
         public MessagePublisher(string connectionString)
         {
             bus = RabbitHutch.CreateBus(connectionString);
@@ -19,6 +20,19 @@ namespace OrderApi.Infastructure
         public void Dispose()
         {
             bus.Dispose();
+        }
+
+        public SharedProducts ProductExists(SharedProducts prod)
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(5));
+            bus.Receive<SharedProducts>("productIsAvailable", message => MethodForProduct(message));
+            prod.Id = id;
+            return prod;
+        }
+
+        private void MethodForProduct(SharedProducts message)
+        {
+            id = message.Id;
         }
 
         public void PublishOrderStatusChangedMessage(int? customerId, IList<SharedOrderLine> orderLines, string topic)
@@ -40,29 +54,6 @@ namespace OrderApi.Infastructure
             };
 
             bus.Publish(message, topic);
-            Timer timer = new Timer(Timeout_Elapsed, message, timeoutInterval, Timeout.Infinite);
-        }
-
-        private void Timeout_Elapsed(object state)
-        {
-            bus.Receive<SharedProducts>("productIsAvailable", message => HandleOrderRequest(message));
-        }
-
-        private void HandleOrderRequest(SharedProducts message)
-        {
-            if (message != null)
-            {
-                orderExists = true;
-            }
-            else
-            {
-                orderExists = false;
-            }
-        }
-
-        public bool DoesOrderExist()
-        {
-            return orderExists;
         }
     }
 }

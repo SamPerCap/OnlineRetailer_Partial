@@ -29,10 +29,8 @@ namespace ProductApi.Infastructure
                     HandleOrderCompleted, x => x.WithTopic("completed"));
 
 
-                bus.Subscribe<SharedProducts>("productIsAvailable",
+                bus.Subscribe<SharedProducts>("available",
                     CheckProductAvailable);
-
-                
 
                 // Add code to subscribe to other OrderStatusChanged events:
                 // * cancelled
