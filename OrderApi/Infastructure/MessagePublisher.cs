@@ -37,7 +37,7 @@ namespace OrderApi.Infastructure
             return response.ProductIsAvailable;
         }
 
-        public bool CustomerExists(int custId)
+        public bool? CustomerExists(int custId)
         {
             var message = new SharedCustomerRequest()
             {
@@ -59,7 +59,7 @@ namespace OrderApi.Infastructure
 
             bus.Publish(message, topic);
         }
-        public bool PublishCustomerExists(int customerId)
+        public bool? PublishCustomerExists(int customerId)
         {
             var message = new SharedCustomerRequest
             {

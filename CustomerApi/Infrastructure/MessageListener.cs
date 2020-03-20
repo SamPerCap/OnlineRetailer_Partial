@@ -28,7 +28,7 @@ namespace CustomerApi.Infrastructure
                 bus.Respond<SharedCustomerRequest, SharedCustomerResponse>(message => HandleCustomerExists(message));
 
                 lock (this)
-                    Monitor.Wait(this);
+                  Monitor.Wait(this);
             }
         }
 
@@ -44,12 +44,13 @@ namespace CustomerApi.Infrastructure
                 var productRepos = services.GetService<IRepository<SharedCustomers>>();
 
                 var cust = productRepos.Get(message.CustomerId);
-                if (cust.CreditStanding >  0)
+                if (cust != null || cust.CreditStanding >  0)
                 {
                     response.Exists = true;
                 }
                 else
                 {
+                    response = new SharedCustomerResponse();
                     response.Exists = false;
                 }
                 return response;

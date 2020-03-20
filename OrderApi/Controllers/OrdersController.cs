@@ -53,9 +53,8 @@ namespace OrderApi.Controllers
             {
                 return BadRequest();
             }
-
-            //if (ProductItemsAvailable(order) && CustomerExists(order))
-            if (CustomerExists(order))
+            var cust = CustomerExists(order);
+            if (cust == true && cust != null)
             {
                 try
                 {
@@ -85,42 +84,14 @@ namespace OrderApi.Controllers
             else
             {
                 // If there are not enough product items available.
-                return StatusCode(500, "Not enough items in stock.");
+                return StatusCode(500, "The user is not registered");
             }
         }
 
-        private bool CustomerExists(SharedOrders orders)
+        private bool? CustomerExists(SharedOrders orders)
         {
             return messagePublisher.PublishCustomerExists(orders.customerId);
         }
 
-
-        private bool ProductItemsAvailable(SharedOrders order)
-        {
-            try
-            {
-                foreach (var orderLine in order.OrderLines)
-                {
-                    // Call product service to get the product ordered.
-                    //  var orderedProduct = productGateway.Get(orderLine.ProductId);
-
-                    // Publish PublishShareProducts. If this operation
-                    // fails, the order will not be created
-                    messagePublisher.PublishSharedProducts(
-                         orderLine.ProductId, "available");
-
-
-                    //if (orderLine.Quantity > orderedProduct.ItemsInStock - orderedProduct.ItemsReserved)
-                    //{
-                    //    return false;
-                    //}
-                }
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 }
