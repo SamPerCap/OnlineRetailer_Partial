@@ -28,7 +28,7 @@ namespace CustomerApi.Infrastructure
                 bus.Respond<SharedCustomerRequest, SharedCustomerResponse>(message => HandleCustomerExists(message));
 
                 lock (this)
-                  Monitor.Wait(this);
+                    Monitor.Wait(this, 8000);
             }
         }
 
@@ -37,20 +37,22 @@ namespace CustomerApi.Infrastructure
             // A service scope is created to get an instance of the product repository.
             // When the service scope is disposed, the product repository instance will
             // also be disposed.
+
             using (var scope = provider.CreateScope())
             {
-                var response = new SharedCustomerResponse();
+                SharedCustomerResponse response = new SharedCustomerResponse();
+
                 var services = scope.ServiceProvider;
                 var productRepos = services.GetService<IRepository<SharedCustomers>>();
 
                 var cust = productRepos.Get(message.CustomerId);
-                if (cust != null || cust.CreditStanding >  0)
+                if (cust.CreditStanding > 0)
                 {
                     response.Exists = true;
                 }
                 else
                 {
-                    response = new SharedCustomerResponse();
+                    response = null;
                     response.Exists = false;
                 }
                 return response;
