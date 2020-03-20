@@ -22,9 +22,9 @@ namespace OrderApi.Data
 
             List<SharedOrders> orders = new List<SharedOrders>
             {
-                new SharedOrders { Date = DateTime.Today,
+                new SharedOrders { customerId = 1, Date = DateTime.Today,
                     OrderLines = new List<SharedOrderLine>{
-                        new SharedOrderLine { ProductId = 1, Quantity = 2 }
+                        new SharedOrderLine { ProductId = 1, Quantity = 2, OrderId = 1 }
                     }
                     }
             };

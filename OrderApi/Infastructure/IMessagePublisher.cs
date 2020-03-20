@@ -15,5 +15,6 @@ namespace OrderApi.Infastructure
         IList<SharedOrderLine> orderLines, string topic);
         bool ProductExists(int ProductId, int Amount);
         bool CustomerExists(int CustId);
+        void CancelOrder(int? customerId, IList<SharedOrderLine> orderLines, string topic);
     }
 }

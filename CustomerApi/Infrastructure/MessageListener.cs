@@ -41,10 +41,15 @@ namespace CustomerApi.Infrastructure
             {
                 var response = new SharedCustomerResponse();
                 var services = scope.ServiceProvider;
-                var productRepos = services.GetService<IRepository<SharedCustomers>>();
+                var customerRepo = services.GetService<IRepository<SharedCustomers>>();
 
-                var cust = productRepos.Get(message.CustomerId);
-                if (cust.CreditStanding >  0)
+                var cust = customerRepo.Get(message.CustomerId);
+
+                if (cust == null)
+                {
+                    response.Exists = false;
+                }
+                else if (cust.CreditStanding >  0)
                 {
                     response.Exists = true;
                 }

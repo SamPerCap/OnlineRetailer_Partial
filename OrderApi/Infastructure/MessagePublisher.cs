@@ -77,5 +77,16 @@ namespace OrderApi.Infastructure
 
             bus.Send(topic, message);
         }
+
+        public void CancelOrder(int? customerId, IList<SharedOrderLine> orderLines, string topic)
+        {
+            var message = new OrderStatusChangedMessage
+            {
+                CustomerId = customerId,
+                SharedOrderLine = orderLines
+            };
+
+            bus.Publish(message, topic);
+        }
     }
 }

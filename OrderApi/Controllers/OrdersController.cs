@@ -46,6 +46,32 @@ namespace OrderApi.Controllers
         }
 
         // POST api/orders
+        [HttpDelete("{id}")]
+        public IActionResult CancelOrder([FromBody]SharedOrders order)
+        {
+            if (order == null ||order.customerId <=0)
+            {
+                return StatusCode(500, "No such order");
+            }
+            try
+            {
+                // Publish OrderStatusChangedMessage. If this operation
+                // fails, the order will not be created
+                messagePublisher.PublishOrderStatusChangedMessage(
+                    order.customerId, order.OrderLines, "cancelled");
+
+                order.Status = SharedOrders.OrderStatus.cancelled;
+                repository.Remove(order.Id);
+                return StatusCode(200, "Order cancelled");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+
+        }
+
+        // POST api/orders
         [HttpPost]
         public IActionResult Post([FromBody]SharedOrders order)
         {
@@ -54,7 +80,7 @@ namespace OrderApi.Controllers
                 return BadRequest();
             }
 
-            //if (ProductItemsAvailable(order) && CustomerExists(order))
+
             if (CustomerExists(order))
             {
                 try
@@ -63,10 +89,9 @@ namespace OrderApi.Controllers
                     {
                         if (!messagePublisher.ProductExists(item.ProductId, item.Quantity))
                         {
-                            return StatusCode(500, "Not enough items in stock.");
+                            return StatusCode(500, "Not enough Item's in Stock");
                         }
                     }
-
                     // Publish OrderStatusChangedMessage. If this operation
                     // fails, the order will not be created
                     messagePublisher.PublishOrderStatusChangedMessage(
@@ -85,7 +110,7 @@ namespace OrderApi.Controllers
             else
             {
                 // If there are not enough product items available.
-                return StatusCode(500, "Not enough items in stock.");
+                return StatusCode(500, "User doesn't exist.");
             }
         }
 
@@ -94,33 +119,5 @@ namespace OrderApi.Controllers
             return messagePublisher.PublishCustomerExists(orders.customerId);
         }
 
-
-        private bool ProductItemsAvailable(SharedOrders order)
-        {
-            try
-            {
-                foreach (var orderLine in order.OrderLines)
-                {
-                    // Call product service to get the product ordered.
-                    //  var orderedProduct = productGateway.Get(orderLine.ProductId);
-
-                    // Publish PublishShareProducts. If this operation
-                    // fails, the order will not be created
-                    messagePublisher.PublishSharedProducts(
-                         orderLine.ProductId, "available");
-
-
-                    //if (orderLine.Quantity > orderedProduct.ItemsInStock - orderedProduct.ItemsReserved)
-                    //{
-                    //    return false;
-                    //}
-                }
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
     }
 }
