@@ -7,7 +7,7 @@ namespace SharedModels
     public class SharedCustomerResponse
     {
         public int CustomerId { get; set; }
-        public bool Exists { get; set; }
+        public bool? Exists { get; set; }
 
     }
 }

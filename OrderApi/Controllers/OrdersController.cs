@@ -79,9 +79,8 @@ namespace OrderApi.Controllers
             {
                 return BadRequest();
             }
-
-
-            if (CustomerExists(order))
+            var cust = CustomerExists(order);
+            if (cust == true && cust != null)
             {
                 try
                 {
@@ -110,11 +109,11 @@ namespace OrderApi.Controllers
             else
             {
                 // If there are not enough product items available.
-                return StatusCode(500, "User doesn't exist.");
+                return StatusCode(500, "The user is not registered");
             }
         }
 
-        private bool CustomerExists(SharedOrders orders)
+        private bool? CustomerExists(SharedOrders orders)
         {
             return messagePublisher.PublishCustomerExists(orders.customerId);
         }
